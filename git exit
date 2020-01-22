@@ -1,0 +1,82 @@
+[33mcommit 4bbc8c5d3f7fbddd1f3ce4630052e0904e6ae571[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Bunke <2114347409@qq.com>
+Date:   Wed Jan 22 09:56:49 2020 +0800
+
+    second commit
+
+[1mdiff --git a/app/src/main/java/com/example/lbstest/MainActivity.java b/app/src/main/java/com/example/lbstest/MainActivity.java[m
+[1mindex 00f23ab..9dcaf37 100644[m
+[1m--- a/app/src/main/java/com/example/lbstest/MainActivity.java[m
+[1m+++ b/app/src/main/java/com/example/lbstest/MainActivity.java[m
+[36m@@ -15,7 +15,9 @@[m [mimport com.baidu.location.BDLocation;[m
+ import com.baidu.location.BDLocationListener;[m
+ import com.baidu.location.LocationClient;[m
+ import com.baidu.location.LocationClientOption;[m
+[32m+[m[32mimport com.baidu.mapapi.SDKInitializer;[m
+ import com.baidu.mapapi.map.BaiduMap;[m
+[32m+[m[32mimport com.baidu.mapapi.map.MapView;[m
+ [m
+ import java.util.ArrayList;[m
+ import java.util.List;[m
+[36m@@ -26,12 +28,16 @@[m [mpublic class MainActivity extends AppCompatActivity {[m
+ [m
+     private TextView positionText;[m
+ [m
+[32m+[m[32m    private MapView mapView;[m
+[32m+[m
+     @Override[m
+     protected void onCreate(Bundle savedInstanceState) {[m
+         super.onCreate(savedInstanceState);[m
+         mLocationClient = new LocationClient(getApplicationContext());[m
+         mLocationClient.registerLocationListener(new MyLocationListener());[m
+[32m+[m[32m        SDKInitializer.initialize(getApplicationContext());[m
+         setContentView(R.layout.activity_main);[m
+[32m+[m[32m        mapView = (MapView) findViewById(R.id.bmapview);[m
+         positionText = (TextView) findViewById(R.id.position_text_view);[m
+         List<String> permissionList = new ArrayList<>();[m
+         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission[m
+[36m@@ -67,10 +73,23 @@[m [mpublic class MainActivity extends AppCompatActivity {[m
+         mLocationClient.setLocOption(option);[m
+     }[m
+ [m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected void onResume() {[m
+[32m+[m[32m        super.onResume();[m
+[32m+[m[32m        mapView.onResume();[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected void onPause() {[m
+[32m+[m[32m        super.onPause();[m
+[32m+[m[32m        mapView.onPause();[m
+[32m+[m[32m    }[m
+[32m+[m
+     @Override[m
+     protected void onDestroy() {[m
+         super.onDestroy();[m
+         mLocationClient.stop();[m
+[32m+[m[32m        mapView.onDestroy();[m
+     }[m
+ [m
+     @Override[m
+[1mdiff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml[m
+[1mindex b3cd1ae..f6996af 100644[m
+[1m--- a/app/src/main/res/layout/activity_main.xml[m
+[1m+++ b/app/src/main/res/layout/activity_main.xml[m
+[36m@@ -9,7 +9,14 @@[m
+     <TextView[m
+         android:id="@+id/position_text_view"[m
+         android:layout_width="wrap_content"[m
+[31m-        android:layout_height="wrap_content"/>[m
+[32m+[m[32m        android:layout_height="wrap_content"[m
+[32m+[m[32m        android:visibility="gone"/>[m
+[32m+[m
+[32m+[m[32m    <com.baidu.mapapi.map.MapView[m
+[32m+[m[32m        android:id="@+id/bmapview"[m
+[32m+[m[32m        android:layout_width="match_parent"[m
+[32m+[m[32m        android:layout_height="match_parent"[m
+[32m+[m[32m        android:clickable="true" />[m
+ [m
+ [m
+ </LinearLayout>[m
+\ No newline at end of file[m
